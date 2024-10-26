@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Paper, Button, TextField, Typography } from '@mui/material';
-import messageBackground from '../assets/images/escudo.png'; // Asegúrate de que la ruta es correcta
+import messageBackground from '../assets/images/escudo.png';
 
 // Contenedor principal del chat con padding en todos los lados para evitar que se pegue
 export const ChatContainer = styled(Paper)`
@@ -20,14 +20,14 @@ export const ChatContainer = styled(Paper)`
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    height: 70vh;
+    height: 90vh;
     padding: 15px;
     padding-left: 15px;
     padding-right: 15px;
   }
 
   @media (max-width: 480px) {
-    height: 60vh;
+    height: 90vh;
     padding: 10px;
     padding-left: 15px;
     padding-right: 15px;
@@ -91,12 +91,14 @@ export const MessagesArea = styled.div`
 `;
 
 // Estilo para los mensajes del usuario y del sistema con colores suaves
-export const Message = styled.div`
+export const Message = styled.div.attrs((props) => ({
+  dangerouslySetInnerHTML: { __html: props.text },  // Renderiza HTML usando `props.text`
+}))`
   margin-bottom: 10px;
   padding: 10px;
   background-color: ${(props) => (props.isUser ? 'rgba(121, 192, 0, 0.3)' : 'rgba(0, 72, 43, 0.9)')};
   color: ${(props) => (props.isUser ? '#000' : '#fff')};
-  align-self: ${(props) => (props.isUser ? 'flex-end' : 'flex-start')} ;
+  align-self: ${(props) => (props.isUser ? 'flex-end' : 'flex-start')};
   border-radius: ${(props) => (props.isUser ? '15px 15px 0 15px' : '15px 15px 15px 0')};
   max-width: 75%;
   word-wrap: break-word;
@@ -153,7 +155,7 @@ export const ChatInput = styled(TextField)`
 
 // Botón de enviar mensaje con un color llamativo y borde redondeado
 export const SendButton = styled(Button)`
-  background-color: #00482B !important;
+  background-color: #007B3E !important;
   color: white !important;
   padding: 10px 20px !important;
   font-weight: bold !important;
