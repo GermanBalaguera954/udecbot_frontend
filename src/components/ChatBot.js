@@ -3,7 +3,7 @@ import { sendMessage } from "../api/chatbotApi";
 import './ChatBot.css'
 
 const ChatBot = () => {
-    const [messages, setMessages] = useState([{ text: "¡Hola! Soy UdecBot, tu asistente virtual. ¿Cómo puedo ayudarte hoy?", sender: "bot" }]);
+    const [messages, setMessages] = useState([{ text: "¡Hola!\n\nSoy UdecBot, tu asistente virtual.\n\n¿Cómo puedo ayudarte hoy?", sender: "bot" }]);
     const [studentId, setStudentId] = useState(null);
     const inputRef = useRef(null);
     const messagesEndRef = useRef(null);
@@ -35,6 +35,19 @@ const ChatBot = () => {
             ]);
         }
 
+
+        // Mostrar el enlace en el frontend como texto amigable
+        if (response.link) {
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                {
+                    text: "Consulta los códigos de materias aquí",
+                    url: response.link,
+                    sender: "link"
+                }
+            ]);
+        }
+
         // Si hay materias en "subjects", añadirlas como parte de la respuesta
         if (response.subjects && response.subjects.length > 0) {
             const subjectsText = response.subjects.map(
@@ -47,6 +60,15 @@ const ChatBot = () => {
             ]);
         }
 
+        // Agregar total de créditos y créditos restantes si están presentes
+        if (response.total_credits !== undefined && response.credits_remaining !== undefined) {
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { text: `Créditos usados: ${response.total_credits}`, sender: "bot" },
+                { text: `Créditos restantes: ${response.credits_remaining}`, sender: "bot" }
+            ]);
+        }
+
         // Si hay opciones adicionales, añadirlas
         if (response.options) {
             response.options.forEach((option) => {
@@ -56,11 +78,11 @@ const ChatBot = () => {
                 ]);
             });
         }
-        
+
         inputRef.current.focus();
     };
 
-     // Para hacer scroll automáticamente al último mensaje
+    // Para hacer scroll automáticamente al último mensaje
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -82,11 +104,20 @@ const ChatBot = () => {
             </div>
             <div className="chatbot-messages">
                 {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.sender}`}>
-                        {msg.text}
+                    <div
+                        key={index}
+                        className={`message ${msg.sender === "option" ? "message-option" : msg.sender}`}
+                    >
+                        {msg.sender === "link" ? (
+                            <a href={msg.url} target="_blank" rel="noopener noreferrer">
+                                {msg.text}
+                            </a>
+                        ) : (
+                            msg.text
+                        )}
                     </div>
                 ))}
-                <div ref={messagesEndRef} /> 
+                <div ref={messagesEndRef} />
             </div>
             <div className="input-container">
                 <input
@@ -94,7 +125,7 @@ const ChatBot = () => {
                     className="chat-input"
                     placeholder="Escribe un mensaje..."
                     onKeyPress={handleKeyPress}
-                    ref={inputRef} // Asigna la referencia al input
+                    ref={inputRef}
                 />
                 <button className="send-button" onClick={() => {
                     const input = inputRef.current;

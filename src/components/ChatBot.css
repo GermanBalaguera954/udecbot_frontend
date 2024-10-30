@@ -55,7 +55,7 @@
     }
 
     50% {
-        transform: translateY(4px);
+        transform: translateY(-10px);
     }
 
     100% {
@@ -140,15 +140,15 @@
 }
 
 .message.bot {
-    background-color: rgba(0, 72, 43, 0.95); /* Fondo un poco más claro */
-    color: #fff; /* Texto blanco para buen contraste */
+    background-color: rgba(0, 72, 43, 0.95);
+    color: #fff;
     align-self: flex-start;
     border-radius: 15px 15px 15px 0;
-    padding: 15px; /* Mayor padding */
-    margin-bottom: 10px; /* Espacio entre mensajes */
-    font-size: 16px; /* Tamaño de fuente aumentado */
-    line-height: 1.2; /* Espacio entre líneas */
-    max-width: 80%; /* Limitar el ancho para evitar que el texto sea demasiado amplio */
+    padding: 15px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.2;
+    max-width: 80%;
 }
 
 @media (max-width: 480px) {
@@ -158,6 +158,47 @@
         padding: 8px;
     }
 }
+
+
+/* Estilos para los mensajes de opción */
+.message-option {
+    background-color: rgba(0, 72, 43, 0.95);
+    color: #fff;
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    align-self: flex-start;
+    /* font-weight: bold; */
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+}
+
+.message-option:hover {
+    background-color: rgba(0, 72, 43, 0.95);
+    filter: brightness(1.2);
+}
+
+.message.link  {
+    text-decoration: underline;
+    cursor: pointer;
+    background-color: rgba(0, 72, 43, 0.95);
+    align-self: flex-start;
+    border-radius: 15px 15px 15px 0;
+    padding: 15px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.2;
+    max-width: 80%;
+}
+
+a {
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 
 .input-container {
     display: flex;
