@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { sendMessage } from "../api/chatbotApi";
-import './ChatBot.css'
+import { useNavigate } from 'react-router-dom';
+import './styles/ChatBot.css';
 
-const ChatBot = () => {
+const ChatBot = ({ onLogout }) => {
     const [messages, setMessages] = useState([{ text: "¡Hola!\n\nSoy UdecBot, tu asistente virtual.\n\n¿Cómo puedo ayudarte hoy?", sender: "bot" }]);
     const [studentId, setStudentId] = useState(null);
     const inputRef = useRef(null);
     const messagesEndRef = useRef(null);
+    const navigate = useNavigate();
 
     // Función para enviar mensajes
     const handleSendMessage = async (text) => {
@@ -15,19 +17,16 @@ const ChatBot = () => {
 
         const response = await sendMessage(text, studentId);
 
-        // Verificar si el backend indica que debe resetearse
         if (response.reset) {
             setStudentId(null);  // Resetear el ID del estudiante
-            setMessages([]);
-            return;  // Detener el flujo aquí si prefieres manejar el mensaje de bienvenida en otro lugar
+            setMessages([]);  // Reiniciar mensajes
+            return;
         }
 
-        // Guarda el studentId si está en la respuesta y no ha sido guardado previamente
         if (!studentId && response.student_id) {
             setStudentId(response.student_id);
         }
 
-        // Si hay un mensaje principal, añadirlo
         if (response.message) {
             setMessages((prevMessages) => [
                 ...prevMessages,
@@ -35,8 +34,6 @@ const ChatBot = () => {
             ]);
         }
 
-
-        // Mostrar el enlace en el frontend como texto amigable
         if (response.link) {
             setMessages((prevMessages) => [
                 ...prevMessages,
@@ -48,7 +45,18 @@ const ChatBot = () => {
             ]);
         }
 
-        // Si hay materias en "subjects", añadirlas como parte de la respuesta
+        // Manejar mensaje de salida
+        if (response.exit) {
+            setMessages((prevMessages) => [
+                ...prevMessages,
+            ]);
+            setTimeout(() => {
+                onLogout(); // Llama a la función de logout para cambiar el estado de autenticación
+                navigate('/'); // Redirige al login después de 2 segundos
+            }, 2000);
+            return;
+        }
+
         if (response.subjects && response.subjects.length > 0) {
             const subjectsText = response.subjects.map(
                 (subject) => `- ${subject.name} (${subject.status}), Créditos: ${subject.credits}`
@@ -60,7 +68,6 @@ const ChatBot = () => {
             ]);
         }
 
-        // Agregar total de créditos y créditos restantes si están presentes
         if (response.total_credits !== undefined && response.credits_remaining !== undefined) {
             setMessages((prevMessages) => [
                 ...prevMessages,
@@ -69,7 +76,6 @@ const ChatBot = () => {
             ]);
         }
 
-        // Si hay opciones adicionales, añadirlas
         if (response.options) {
             response.options.forEach((option) => {
                 setMessages((prevMessages) => [
@@ -78,18 +84,14 @@ const ChatBot = () => {
                 ]);
             });
         }
-
-        inputRef.current.focus();
     };
 
-    // Para hacer scroll automáticamente al último mensaje
     useEffect(() => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [messages]);
 
-    // Enviar mensaje al presionar Enter o al hacer clic en el botón de enviar
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && e.target.value.trim()) {
             handleSendMessage(e.target.value.trim());
