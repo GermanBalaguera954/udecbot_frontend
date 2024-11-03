@@ -4,7 +4,7 @@ const API_BASE_URL = 'http://127.0.0.1:8000/chat/';
 
 export const sendMessage = async (message, studentId = null) => {
     const token = localStorage.getItem('authToken');
-    // console.log("Token JWT enviado:", token);
+    console.log("Token JWT enviado:", token);
 
     try {
         const response = await axios.post(

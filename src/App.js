@@ -1,5 +1,4 @@
-// src/App.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ChatBot from './components/ChatBot';
 import Login from './components/auth/Logins';
@@ -7,7 +6,13 @@ import Signup from './components/auth/Signup';
 import './App.css';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('authToken'));
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Forzar la eliminación del token en el primer renderizado
+    localStorage.removeItem('authToken');
+    setIsAuthenticated(false);
+  }, []);
 
   const handleLogin = (token) => {
     localStorage.setItem('authToken', token);
@@ -27,10 +32,11 @@ function App() {
           element={isAuthenticated ? <Navigate to="/chat" replace /> : <Login onLogin={handleLogin} />}
         />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/chat" element={isAuthenticated ? <ChatBot onLogout={handleLogout} /> : <Navigate to="/" />} />
+        <Route path="/chat" element={isAuthenticated ? <ChatBot onLogout={handleLogout} /> : <Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+

@@ -9,12 +9,17 @@ export const login = async (email, password) => {
             email: email,
             password: password,
         });
+        const { token } = response.data; // Asegúrate de que el token esté en esta estructura
+        if (token) {
+            localStorage.setItem('authToken', token); // Guarda el token en el almacenamiento local
+        }
         return response.data;
     } catch (error) {
         console.error("Login failed:", error);
         throw error;
     }
 };
+
 
 // src/api/authApi.js
 export const signup = async (name, program, currentSemester, email, password) => {
