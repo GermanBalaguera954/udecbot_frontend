@@ -9,9 +9,9 @@ export const login = async (email, password) => {
             email: email,
             password: password,
         });
-        const { token } = response.data; // Asegúrate de que el token esté en esta estructura
+        const { token } = response.data;
         if (token) {
-            localStorage.setItem('authToken', token); // Guarda el token en el almacenamiento local
+            localStorage.setItem('authToken', token);
         }
         return response.data;
     } catch (error) {

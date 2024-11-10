@@ -180,7 +180,7 @@
     filter: brightness(1.2);
 }
 
-.message.link  {
+.message.link {
     text-decoration: underline;
     cursor: pointer;
     background-color: rgba(0, 72, 43, 0.95);

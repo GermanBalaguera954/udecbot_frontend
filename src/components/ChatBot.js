@@ -20,7 +20,7 @@ const ChatBot = ({ onLogout }) => {
         try {
             const response = await sendMessage(text, studentId);
 
-            if (!response) return; // Verificar si response es nulo o indefinido
+            if (!response) return;
 
             if (response.reset) {
                 setStudentId(null);

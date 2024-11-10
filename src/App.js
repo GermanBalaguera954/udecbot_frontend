@@ -9,7 +9,6 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Forzar la eliminación del token en el primer renderizado
     localStorage.removeItem('authToken');
     setIsAuthenticated(false);
   }, []);
@@ -39,4 +38,3 @@ function App() {
 }
 
 export default App;
-

@@ -120,7 +120,6 @@ const Signup = () => {
   const handleSemesterChange = (e) => {
     const value = e.target.value;
 
-    // Verificar si el valor es un número entre 1 y 10
     if (/^[1-9]$|^10$/.test(value) || value === '') {
       setCurrentSemester(value);
     }

@@ -16,7 +16,7 @@ export const sendMessage = async (message, studentId = null) => {
             {
                 headers: {
                     
-                    Authorization: `Bearer ${token}`, // Incluir el token en el encabezado
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
